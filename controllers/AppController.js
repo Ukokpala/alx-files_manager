@@ -1,36 +1,16 @@
-const { checkRedis, checkDatabase } = require('../utils'); // Import your utility functions here
+import redisClient from '../utils/redis';
+import dbClient from '../utils/db';
 
-import RedisClient from '../utils/redis';
-import DBClient from '../utils/db';
-
-const AppController = {
-  getStatus: async (req, res) => {
-    try {
-      const redisStatus = await checkRedis();
-      const dbStatus = await checkDatabase();
-      
-      if (redisStatus && dbStatus) {
-        res.status(200).json({ "redis": true, "db": true });
-      } else {
-        res.status(500).json({ "redis": false, "db": false });
-      }
-    } catch (error) {
-      res.status(500).json({ "error": "Internal Server Error" });
-    }
-  },
-
-  getStats: async (req, res) => {
-    try {
-      // Assuming you have MongoDB as your database
-      const usersCount = await User.countDocuments();
-      const filesCount = await File.countDocuments();
-      
-      res.status(200).json({ "users": usersCount, "files": filesCount });
-    } catch (error) {
-      res.status(500).json({ "error": "Internal Server Error" });
-    }
+class AppController {
+  static getStatus(request, response) {
+    response.status(200).json({ redis: redisClient.isAlive(), db: dbClient.isAlive() });
   }
-};
+
+  static async getStats(request, response) {
+    const usersNum = await dbClient.nbUsers();
+    const filesNum = await dbClient.nbFiles();
+    response.status(200).json({ users: usersNum, files: filesNum });
+  }
+}
 
 module.exports = AppController;
-
