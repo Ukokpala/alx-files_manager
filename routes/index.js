@@ -5,11 +5,6 @@ const UsersController = require('../controllers/UsersController');
 const AuthController = require('../controllers/AuthController');
 const FilesController = require('../controllers/FilesController'); // Import the FilesController
 
-import { Router } from 'express';
-import AppController from '../controllers/AppController';
-import UsersController from '../controllers/UsersController';
-import AuthController from '../controllers/AuthController';
-import FilesController from '../controllers/FilesController';
 
 // GET /status => AppController.getStatus
 router.get('/status', AppController.getStatus);
