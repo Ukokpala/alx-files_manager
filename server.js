@@ -1,15 +1,14 @@
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 5000;
+#!/usr/bin/node
 
-// Middleware to parse JSON requests
-app.use(express.json());
+const express = require("express");
+const router = require("./routes/index");
 
-// Load routes from routes/index.js
-const routes = require('./routes');
-app.use('/', routes);
+const server = express();
+const PORT = process.env.PORT ? process.env.PORT : 5000;
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+server.use(express.json());
+server.use(router);
+
+server.listen(PORT, () =>
+  console.log(`The server is running on port: ${PORT}`)
+);
